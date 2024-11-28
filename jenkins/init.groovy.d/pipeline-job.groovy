@@ -9,7 +9,7 @@ if (jenkins.getItem(jobName) == null) {
 
     def job = jenkins.createProject(FreeStyleProject, jobName)
 
-    def scm = new hudson.plugins.git.GitSCM('https://github.com/giliredbaron/iaqqai.git')
+    def scm = new hudson.plugins.git.GitSCM('https://github.com/giliredbaron/iaqqai_scat.git')
     scm.branches = [new hudson.plugins.git.BranchSpec('*/main')]
     job.scm = scm
 
