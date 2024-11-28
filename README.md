@@ -1,2 +1,2 @@
 # iaqqai_scat
-# GILI 12  fg
+# GILI 12
