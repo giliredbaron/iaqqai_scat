@@ -1,2 +1,2 @@
-# iaqqai_scatqq
+# iaqqai_scat
 # GILI 12
