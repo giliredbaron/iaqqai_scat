@@ -1,20 +1,26 @@
 #!/bin/bash 
 
-echo "Starting build" 
 
 # Docker Hub credentials 
-#DOCKER_USERNAME="yourusername"
-#DOCKER_PASSWORD="yourpassword"
 DOCKERHUB_REPO="giliredbaron"
-targets="app1 app2 nginx"
+TARGETS="app1 app2 nginx"
 
-for target in $targets
+# Define defaults to "latest" if BUILD_ID is not set
+BASE_VERSION="1.2"
+BUILD_VERSION="${BASE_VERSION}.${BUILD_ID:-latest}"
+
+echo "Starting build ${BUILD_VERSION}" 
+for target in $TARGETS
 do
 	if [ -d "$target" ]; then
 		echo "Processing $target..."
-		(cd "$target" && docker build -t "${target}-image" . && docker tag ${target} ${DOCKERHUB_REPO}/${target}:latest && docker push ${DOCKERHUB_REPO}/${target}:latest )
+		cd "$target" && docker build -t "${target}-image" .
+		docker tag ${target} ${DOCKERHUB_REPO}/${target}:${BUILD_VERSION}  && docker push ${DOCKERHUB_REPO}/${target}:${BUILD_VERSION}
+		docker tag ${target} ${DOCKERHUB_REPO}/${target}:latest  && docker push ${DOCKERHUB_REPO}/${target}:latest
 	else 
 		echo "Directory $target does not exist"
 		exit 666
 	fi
+	
+	cd - 
 done

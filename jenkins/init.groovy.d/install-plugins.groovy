@@ -1,32 +1,37 @@
-// Install the Job DSL plugin
-//Jenkins.instance.pluginManager.install('job-dsl')
+import jenkins.model.*
 
-// Install Job DSL plugin using the correct method
-println "222 Installing Job DSL Plugin..."
-//Jenkins.instance.updateCenter.getPlugin('job-dsl').deploy()
-
-// Optionally, wait for the plugin to be installed and Jenkins to restart
-//Jenkins.instance.safeRestart()
-
-
-println "Executing init-script.sh..."
-
-def process = 'bash jenkins-plugin-cli --plugins "job-dsl git"'.execute()
-process.waitForProcessOutput(System.out, System.err)
-
-if (process.exitValue() == 0) {
-    println "Script executed successfully."
-} else {
-    println "Script execution failed with exit code: ${process.exitValue()}"
+// Ensure Jenkins is fully initialized before installing plugins
+def jenkinsInstance = Jenkins.getInstanceOrNull()
+if (jenkinsInstance == null) {
+    println "Jenkins instance is not initialized yet. Exiting script."
+    return
 }
 
+// Define the plugins to install
+def pluginsToInstall = ["job-dsl", "git", "github", "github-branch-source"]
 
-//// Ensure Jenkins is fully initialized before using it
-//def jenkinsInstance = Jenkins.getInstance()
-//println "Installing Job DSL Plugin..."
-//
-//// Install the Job DSL plugin using the proper Jenkins plugin manager
-//jenkinsInstance.updateCenter.getPlugin('job-dsl').deploy()
+println "Installing required plugins: ${pluginsToInstall.join(', ')}"
 
-// Optionally restart Jenkins if necessary after installation
-jenkinsInstance.safeRestart()
+// Install plugins using the Jenkins CLI (jenkins-plugin-cli)
+def command = "bash -c 'jenkins-plugin-cli --plugins ${pluginsToInstall.join(' ')}'"
+def process = command.execute()
+process.waitForProcessOutput(System.out, System.err)
+
+// Check if the process completed successfully
+if (process.exitValue() == 0) {
+    println "Plugins installed successfully. Restarting Jenkins to apply changes..."
+    jenkinsInstance.safeRestart() // Optionally restart Jenkins after plugin installation
+} else {
+    println "Plugin installation failed with exit code: ${process.exitValue()}"
+}
+
+// Wait for Jenkins to be ready after restart
+jenkinsInstance = Jenkins.getInstanceOrNull()
+while (jenkinsInstance == null) {
+    println "Waiting for Jenkins to restart..."
+    sleep(1000)
+    jenkinsInstance = Jenkins.getInstanceOrNull()
+}
+
+println "Jenkins is now ready with installed plugins."
+

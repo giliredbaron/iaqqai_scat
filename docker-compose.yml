@@ -2,7 +2,8 @@
 
 services:
   app1:
-    build: ./app1
+    image: giliredbaron/app1:1
+      #build: ./app1
     ports:
       - "3000:80"
         #    volumes:
@@ -24,21 +25,22 @@ services:
       - app1
       - app2
 
-  jenkins:
-    image: jenkins/jenkins:lts
-    user: root
-    ports:
-      - "8088:8080"
-      - "50000:50000"
-    volumes:
-      - jenkins_home:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./jenkins/init.groovy.d/:/usr/share/jenkins/ref/init.groovy.d
-      - ./jenkins/create-pipeline-job.groovy:/var/jenkins_home/jobs/create-pipeline-job.groovy
-        #- ./Jenkinsfile:/var/jenkins_home/workspace/Jenkinsfile   
-        #- ./pipeline-repo:/home/pipeline  # Mount repository containing Jenkinsfile
-    environment:
-      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false  # Disable the wizard
-
-volumes:
-  jenkins_home:
+        #  jenkins:
+        #    image: jenkins/jenkins:lts
+        #    user: root
+        #    ports:
+        #      - "8088:8080"
+        #      - "50000:50000"
+        #    volumes:
+        #      - jenkins_home:/var/jenkins_home
+        #      - /var/run/docker.sock:/var/run/docker.sock
+        #      - ./jenkins/init.groovy.d/:/usr/share/jenkins/ref/init.groovy.d
+        #        #- ./jenkins/create-pipeline-job.groovy:/var/jenkins_home/jobs/create-pipeline-job.groovy
+        #        #- ./Jenkinsfile:/var/jenkins_home/workspace/Jenkinsfile   
+        #        #- ./pipeline-repo:/home/pipeline  # Mount repository containing Jenkinsfile
+        #    environment:
+        #      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false  # Disable the wizard
+        #
+        #volumes:
+        #  jenkins_home:
+        #
