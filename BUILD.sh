@@ -7,7 +7,8 @@ DOCKERHUB_REPO="giliredbaron"
 targets="app1 app2 nginx"
 
 # Define defaults to "latest" if BUILD_ID is not set
-BUILD_VERSION="${BUILD_ID:-latest}"
+BASE_VERSION="1.2"
+BUILD_VERSION="${BASE_VERSION}.${BUILD_ID:-latest}"
 
 for target in $targets
 do
