@@ -1,0 +1,48 @@
+
+
+services:
+  app1:
+    image: giliredbaron/app1:latest
+      #build: ./app1
+    ports:
+      - "3000:80"
+        #    volumes:
+        #      - ./app1/nginx.conf:/etc/nginx/nginx.conf:ro  # Mount custom nginx.conf
+
+  app2:
+    image: giliredbaron/app2:latest
+      #build: ./app2
+    ports:
+      - "3001:3001"
+
+  nginx:
+    image:  giliredbaron/nginx:latest
+      #build: ./nginx
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro  # Mount custom nginx.conf
+    depends_on:
+      - app1
+      - app2
+
+        #  jenkins:
+        #    image: jenkins/jenkins:lts
+        #    user: root
+        #    ports:
+        #      - "8088:8080"
+        #      - "50000:50000"
+        #    volumes:
+        #      - jenkins_home:/var/jenkins_home
+        #      - /var/run/docker.sock:/var/run/docker.sock
+        #      - ./jenkins/init.groovy.d/:/usr/share/jenkins/ref/init.groovy.d
+        #        #- ./jenkins/create-pipeline-job.groovy:/var/jenkins_home/jobs/create-pipeline-job.groovy
+        #        #- ./Jenkinsfile:/var/jenkins_home/workspace/Jenkinsfile   
+        #        #- ./pipeline-repo:/home/pipeline  # Mount repository containing Jenkinsfile
+        #    environment:
+        #      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false  # Disable the wizard
+        #
+        #volumes:
+        #  jenkins_home:
+        #
