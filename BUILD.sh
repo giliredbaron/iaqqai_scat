@@ -15,8 +15,8 @@ do
 	if [ -d "$target" ]; then
 		echo "Processing $target..."
 		cd "$target" && docker build -t "${target}-image" .
-		docker tag ${target} ${DOCKERHUB_REPO}/${target}:${BUILD_VERSION}  && docker push ${DOCKERHUB_REPO}/${target}:${BUILD_VERSION}
-		docker tag ${target} ${DOCKERHUB_REPO}/${target}:latest  && docker push ${DOCKERHUB_REPO}/${target}:latest
+		docker tag ${target}-image ${DOCKERHUB_REPO}/${target}:${BUILD_VERSION}  && docker push ${DOCKERHUB_REPO}/${target}:${BUILD_VERSION}
+		docker tag ${target}-image ${DOCKERHUB_REPO}/${target}:latest  && docker push ${DOCKERHUB_REPO}/${target}:latest
 	else 
 		echo "Directory $target does not exist"
 		exit 666
