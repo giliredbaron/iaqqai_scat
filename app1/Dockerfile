@@ -1,5 +1,5 @@
 FROM nginx:alpine
-COPY index.html /usr/share/nginx/html/
+COPY index.html /usr/share/nginx/html/index.html
 # Copy the Nginx configuration file
 COPY ./nginx.conf /etc/nginx/nginx.conf
 #COPY nginx.conf /etc/nginx/nginx.conf
