@@ -4,12 +4,13 @@
 FROM jenkins/jenkins:lts
 
 USER root
-RUN apt-get update && apt-get install -y sudo
+RUN apt-get update && apt-get install -y sudo docker docker-compose
 RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
 
 # Jenkins Plugins Installation
 #RUN jenkins-plugin-cli --plugins "git blueocean github github-branch-source"
 #RUN jenkins-plugin-cli --plugins "git github github-branch-source github-api github-organization-folder"
+#RUN jenkins-plugin-cli --plugins "git github github-branch-source github-api docker"
 RUN jenkins-plugin-cli --plugins "git github github-branch-source github-api"
 
 # Copy init groovy scripts
