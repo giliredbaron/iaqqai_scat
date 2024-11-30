@@ -2,20 +2,22 @@
 
 services:
   app1:
-    image: giliredbaron/app1:1
-      #build: ./app1
+    #image: giliredbaron/app1:latest
+    build: ./app1
     ports:
       - "3000:80"
         #    volumes:
         #      - ./app1/nginx.conf:/etc/nginx/nginx.conf:ro  # Mount custom nginx.conf
 
   app2:
-    build: ./app2
+    image: giliredbaron/app2:latest
+      #build: ./app2
     ports:
       - "3001:3001"
 
   nginx:
-    build: ./nginx
+    image: nginx:latest
+      #build: ./nginx
     ports:
       - "443:443"
       - "80:80"
