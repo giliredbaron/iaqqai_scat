@@ -1,6 +1,9 @@
+
 # IAQ QAI SCAT Project
 
 This project consists of two applications, **App1** and **App2**, and an NGINX gateway to route requests. It also includes Jenkins for building and deploying the project. The project can be built locally using Docker Compose or from pre-built Docker images stored on DockerHub.
+
+---
 
 ## Project Structure
 
@@ -32,6 +35,8 @@ This project consists of two applications, **App1** and **App2**, and an NGINX g
 - **`jenkins/`**  
   Sets up Jenkins for building the project.
 
+---
+
 ## Getting Started
 
 ### Prerequisites
@@ -45,3 +50,87 @@ This project consists of two applications, **App1** and **App2**, and an NGINX g
 To build and run the project locally, use:
 ```bash
 docker-compose up --build
+```
+
+#### Run from DockerHub
+To run the project using pre-built images:
+```bash
+docker-compose -f docker-compose_from_dockerHub.yml up
+```
+
+#### Run with Jenkins
+To use Jenkins for building and deploying the project:
+1. Start Jenkins:
+   ```bash
+   docker-compose -f docker-compose_jenkins.yml up
+   ```
+2. Configure Jenkins to run the job defined in the `Jenkinsfile`.
+
+---
+
+## Jenkins Pipeline
+
+When using Jenkins to build the project:
+
+1. **User Input**: The pipeline prompts the user to select a release version to build.
+2. **Build Process**: Jenkins:
+   - Builds Docker images for **App1** and **App2**.
+   - Pushes the images to DockerHub.
+3. **Verification**: Images are tagged appropriately and uploaded to DockerHub.
+
+---
+
+## Testing the Applications
+
+### App1
+To test **App1**, navigate to:
+```text
+https://<server_ip>/app1
+```
+**Expected Output**:  
+A web page displaying `APP1`.
+
+### App2
+To test **App2**, navigate to:
+```text
+https://<server_ip>/app2
+```
+**Expected Output**:  
+An "Upgrade Required" message (as **App2** uses WebSocket connections).
+
+#### Testing App2 with `wscat`
+You can test **App2** using `wscat`:
+```bash
+wscat -c wss://<server_ip>/app2 --no-check
+```
+**Example Output**:
+```text
+Connected (press CTRL+C to quit)
+< Welcome to the WebSocket server!
+> hi
+< Hello, you sent -> hi
+```
+
+In the logs, you will see entries similar to:
+```text
+app2-1   | Client connected
+app2-1   | Received: hi
+nginx-1  | 172.21.0.1 - - [30/Nov/2024:21:32:55 +0000] "GET /app2 HTTP/1.1" 101 60 "-" "-"
+app2-1   | Client disconnected
+```
+
+---
+
+## Logs and Troubleshooting
+
+### NGINX Logs
+NGINX logs can be found under the container logs or configured log directory.
+
+### Jenkins Logs
+Jenkins logs and job statuses are accessible through the Jenkins UI.
+
+---
+
+## Notes
+- Make sure to configure environment variables before running the project.
+- Use the provided Docker Compose files for different environments as needed.
